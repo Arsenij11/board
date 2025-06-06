@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Расписание врачей</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100vw;
+            min-width: 720px;
+            height: 15vh;
+            background-color: #251f21;
+            text-transform: uppercase;
+            font-size: 2em;
+            text-align: center;
+        }
+        .today {
+            font-size: 1em;
+            position: relative;
+            right: 1%;
+        }
+        main {
+            width: 100vw;
+            min-width: 720px;
+            height: calc(100vh - 15vh); 
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            height: 100%;
+            font-size: 1.5em;
+            text-align: center;
+        }
+        td {
+            border: 1px solid #bcba87;
+        }
+        thead {
+            background-color: grey;
+        }
+        tbody > tr:nth-child(odd) {
+            background-color: #251f21;
+        }
+        tbody > tr:nth-child(even) {
+            background-color: #132b4f;
+        }
+        footer {
+            width: 100vw;
+            min-width: 720px;
+            background-color: #251f21;
+            height: 10vh;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <header><span class="time_now"></span><div>Расписание приёма врачей</div><span class="today"></span></header>
+    <main>
+        <table>
+            <thead>
+                <td>ФИО</td>
+                <td>Специальность</td>
+                <td>Кабинет</td>
+                <td>Время приёма</td>
+            </thead>
+            <tbody>
+                {% for d in doctors %}
+                    <tr>
+                        <td>{{d.name}}</td>
+                        <td>{{d.speciality}}</td>
+                        <td>{{d.room}}</td>
+                        <td>{{d.time}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+    <footer>Поликлиника работает с 9:00 до 21:00</footer>
+    <script>
+        const time_now = document.querySelector('.time_now');
+        const datum = new Date();
+        const minutes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        time_now.textContent = `${datum.getHours()} : ${minutes.filter((el) => {return el === datum.getMinutes()}).length > 0 ? "0" + datum.getMinutes() : datum.getMinutes()}`; 
+        const today = document.querySelector('.today');
+        const month = {
+            '1' : 'Января',
+            '2' : 'Февраля',
+            '3' : 'Марта',
+            '4' : 'Апреля',
+            '5' : 'Мая',
+            '6' : 'Июня',
+            '7' : 'Июля',
+            '8' : 'Августа',
+            '9' : 'Сентября',
+            '10' : 'Октября',
+            '11' : 'Ноября',
+            '12' : 'Декабря',
+        }
+        const week = {
+            '1' : 'Понедельник',
+            '2' : 'Вторник',
+            '3' : 'Среда',
+            '4' : 'Четверг',
+            '5' : 'Пятница',
+            '6' : 'Суббота',
+            '7' : 'Воскресенье',
+        }
+        today.innerHTML = `${datum.getDate()} ${month[String(datum.getMonth())]} ${datum.getFullYear()}<br>${week[String(datum.getDay())]}`;
+
+        setInterval(() => {
+            const datum = new Date();
+            time_now.textContent = `${datum.getHours()} : ${minutes.filter((el) => {return el === datum.getMinutes()}).length > 0 ? "0" + datum.getMinutes() : datum.getMinutes()}`;
+            today.innerHTML = `${datum.getDate()} ${month[String(datum.getMonth())]} ${datum.getFullYear()}<br>${week[String(datum.getDay())]}`; 
+        }, 1000);
+
+    </script>
+</body>
+</html>
